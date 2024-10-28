@@ -40,4 +40,7 @@
 #define BIT_7 0x80
 
 
+void Peripheral_Init(void);
+
+
 #endif /* __LAN_OS_H__ */

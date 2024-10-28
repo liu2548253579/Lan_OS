@@ -7,6 +7,8 @@
         "led_matrix.h": "c",
         "led_user.h": "c",
         "adc_user.h": "c",
-        "charge_user.h": "c"
+        "charge_user.h": "c",
+        "lowpower_user.h": "c",
+        "lan_os.h": "c"
     }
 }
