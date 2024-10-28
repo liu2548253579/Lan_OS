@@ -1,89 +1,108 @@
 #include "Led_Matrix.h"
 
-uint8_t LED_Data[2] = {0x00,0x00}; // LED显示数据
+#error "请在此处修改LED的驱动引脚"
+LED_Element  LED1={
+    // .LED_Pin=GPIO_PIN_1,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED2={
+    // .LED_Pin=GPIO_PIN_2,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED3={
+    // .LED_Pin=GPIO_PIN_3,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED4={
+    // .LED_Pin=GPIO_PIN_4,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED5={
+    // .LED_Pin=GPIO_PIN_5,
+    // .LED_Port=GPIOB
+};
+LED_Element  LED6={
+    // .LED_Pin=GPIO_PIN_6,
+    // .LED_Port=GPIOB
+};
+LED_Element  LED7={
+    // .LED_Pin=GPIO_PIN_7,
+    // .LED_Port=GPIOB
+};
+LED_Element  LED8={
+    // .LED_Pin=GPIO_PIN_8,
+    // .LED_Port=GPIOB
+};
 
-//宏定义快速操作GPIO
-#define LED_Pin1(State) digitalWrite(GPIO1,State)
-#define LED_Pin2(State) digitalWrite(GPIO2,State)
-#define LED_Pin3(State) digitalWrite(GPIO3,State)
-#define LED_Pin4(State) digitalWrite(GPIO4,State)
-#define LED_Pin5(State) digitalWrite(GPIO5,State)
-#define LED_Pin6(State) digitalWrite(GPIO6,State)
-#define LED_Pin7(State) digitalWrite(GPIO7,State)
-#define LED_Pin8(State) digitalWrite(GPIO8,State)
 
 
-uint8_t Get_Bit(uint8_t data_led, uint8_t bit_index) {
-    if (bit_index >= 8) {
-        return 0; // 如果索引超出范围，返回 0
-    }
-    // 使用位掩码取出指定位并确保返回值为 0 或 1
-    return ((data_led >> bit_index) & 0x01) ? 1 : 0;
-}
-
-
-void LED_Init(void)
+void LED_Matrix_ALL_OFF(void)
 {
-    //初始化GPIO为输出
-    PinMode(GPIO1,OUTPUT);
-    PinMode(GPIO2,OUTPUT);
-    PinMode(GPIO3,OUTPUT);
-    PinMode(GPIO4,OUTPUT);
-    PinMode(GPIO5,OUTPUT);
-    PinMode(GPIO6,OUTPUT);
-    PinMode(GPIO7,OUTPUT);
-    PinMode(GPIO8,OUTPUT);
+    LED_Set_Input(&LED1);
+    LED_Set_Input(&LED2);
+    LED_Set_Input(&LED3);
+    LED_Set_Input(&LED4);
+    LED_Set_Input(&LED5);
+    LED_Set_Input(&LED6);
+    LED_Set_Input(&LED7);
+    LED_Set_Input(&LED8);
 }
 
-void LED_ALL_OFF(void)
-{
-    LED_Pin1(1);LED_Pin2(1);LED_Pin3(1);LED_Pin4(1);
-    LED_Pin5(0);LED_Pin6(0);LED_Pin7(0);LED_Pin8(0);
-}
+/*
+ * GPIO矩阵对应关系表:
+ * 
+ *           GPIO5   GPIO6   GPIO7   GPIO8   高电平
+ * GPIO1     LED1    LED2    LED3    LED4
+ * GPIO2     LED5    LED6    LED7    LED8
+ * GPIO3     LED9    LED10   LED11   LED12
+ * GPIO4     LED13   LED14   LED15   LED16
+ * 低电平
+ *
+ */
 
-void LED_Task(void)
+void LED_Matrix_ReFresh(void)
 {
     static uint8_t Columns = 0;
     if(++Columns >= 4){Columns = 0;}
 
-    LED_ALL_OFF();//消隐
+    LED_Matrix_ALL_OFF();//消隐
 
     switch (Columns)
     {
         case 0:
-            LED_Pin1(0);//选择第一行
-            if(Get_Bit(LED_Data[0],0)){LED_Pin5(1);}else{LED_Pin5(0);}//显示第一列
-            if(Get_Bit(LED_Data[0],1)){LED_Pin6(1);}else{LED_Pin6(0);}//显示第二列
-            if(Get_Bit(LED_Data[0],2)){LED_Pin7(1);}else{LED_Pin7(0);}//显示第三列
-            if(Get_Bit(LED_Data[0],3)){LED_Pin8(1);}else{LED_Pin8(0);}//显示第四列
+            LED_Set_Output(&LED1,0);//选择第一行
+            if(Get_Bit(LED_Data[0],0)){LED_Set_Output(&LED5,1);}else{LED_Set_Output(&LED5,0);}//显示第一列
+            if(Get_Bit(LED_Data[0],1)){LED_Set_Output(&LED6,1);}else{LED_Set_Output(&LED6,0);}//显示第二列
+            if(Get_Bit(LED_Data[0],2)){LED_Set_Output(&LED7,1);}else{LED_Set_Output(&LED7,0);}//显示第三列
+            if(Get_Bit(LED_Data[0],3)){LED_Set_Output(&LED8,1);}else{LED_Set_Output(&LED8,0);}//显示第四列
             break;
 
         case 1:
-            LED_Pin2(0);//选择第二行
-            if(Get_Bit(LED_Data[0],4)){LED_Pin5(1);}else{LED_Pin5(0);}//显示第一列
-            if(Get_Bit(LED_Data[0],5)){LED_Pin6(1);}else{LED_Pin6(0);}//显示第二列
-            if(Get_Bit(LED_Data[0],6)){LED_Pin7(1);}else{LED_Pin7(0);}//显示第三列
-            if(Get_Bit(LED_Data[0],7)){LED_Pin8(1);}else{LED_Pin8(0);}//显示第四列
+            LED_Set_Output(&LED2,0);//选择第二行
+            if(Get_Bit(LED_Data[0],4)){LED_Set_Output(&LED5,1);}else{LED_Set_Output(&LED5,0);}//显示第一列
+            if(Get_Bit(LED_Data[0],5)){LED_Set_Output(&LED6,1);}else{LED_Set_Output(&LED6,0);}//显示第二列
+            if(Get_Bit(LED_Data[0],6)){LED_Set_Output(&LED7,1);}else{LED_Set_Output(&LED7,0);}//显示第三列
+            if(Get_Bit(LED_Data[0],7)){LED_Set_Output(&LED8,1);}else{LED_Set_Output(&LED8,0);}//显示第四列
             break;
 
         case 2:
-            LED_Pin3(0);//选择第三行
-            if(Get_Bit(LED_Data[1],0)){LED_Pin5(1);}else{LED_Pin5(0);}//显示第一列
-            if(Get_Bit(LED_Data[1],1)){LED_Pin6(1);}else{LED_Pin6(0);}//显示第二列
-            if(Get_Bit(LED_Data[1],2)){LED_Pin7(1);}else{LED_Pin7(0);}//显示第三列
-            if(Get_Bit(LED_Data[1],3)){LED_Pin8(1);}else{LED_Pin8(0);}//显示第四列
+            LED_Set_Output(&LED3,0);//选择第三行
+            if(Get_Bit(LED_Data[1],0)){LED_Set_Output(&LED5,1);}else{LED_Set_Output(&LED5,0);}//显示第一列
+            if(Get_Bit(LED_Data[1],1)){LED_Set_Output(&LED6,1);}else{LED_Set_Output(&LED6,0);}//显示第二列
+            if(Get_Bit(LED_Data[1],2)){LED_Set_Output(&LED7,1);}else{LED_Set_Output(&LED7,0);}//显示第三列
+            if(Get_Bit(LED_Data[1],3)){LED_Set_Output(&LED8,1);}else{LED_Set_Output(&LED8,0);}//显示第四列
             break;
 
         case 3:
-            LED_Pin4(0);//选择第四行
-            if(Get_Bit(LED_Data[1],4)){LED_Pin5(1);}else{LED_Pin5(0);}//显示第一列
-            if(Get_Bit(LED_Data[1],5)){LED_Pin6(1);}else{LED_Pin6(0);}//显示第二列
-            if(Get_Bit(LED_Data[1],6)){LED_Pin7(1);}else{LED_Pin7(0);}//显示第三列
-            if(Get_Bit(LED_Data[1],7)){LED_Pin8(1);}else{LED_Pin8(0);}//显示第四列
+            LED_Set_Output(&LED4,0);//选择第四行
+            if(Get_Bit(LED_Data[1],4)){LED_Set_Output(&LED5,1);}else{LED_Set_Output(&LED5,0);}//显示第一列
+            if(Get_Bit(LED_Data[1],5)){LED_Set_Output(&LED6,1);}else{LED_Set_Output(&LED6,0);}//显示第二列
+            if(Get_Bit(LED_Data[1],6)){LED_Set_Output(&LED7,1);}else{LED_Set_Output(&LED7,0);}//显示第三列
+            if(Get_Bit(LED_Data[1],7)){LED_Set_Output(&LED8,1);}else{LED_Set_Output(&LED8,0);}//显示第四列
             break;
 
         default:
-            LED_ALL_OFF();
+            LED_Matrix_ALL_OFF();
             break;
     }
 }

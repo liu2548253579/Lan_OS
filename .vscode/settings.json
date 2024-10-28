@@ -2,6 +2,9 @@
     "files.associations": {
         "filter_user.h": "c",
         "stdint.h": "c",
-        "key_user.h": "c"
+        "key_user.h": "c",
+        "led_charlie.h": "c",
+        "led_matrix.h": "c",
+        "led_user.h": "c"
     }
 }

@@ -1,6 +1,12 @@
 #include "Key_User.h"
 
 
+#error "请在此处配置多击统计时间与长按时间的Tick值，Tick值单位由Key_Refresh函数的调用周期决定"
+Key_Element key1={
+    // .long_set=1000,//长按时间(Tick)
+    // .time_set=500//统计多按时间(Tick)
+};
+
 
 /**
  * @brief 初始化按键GPIO
@@ -8,7 +14,28 @@
  */
 void Key_Init(void)
 {
-    pinMode(KEY_GPIO, INPUT);//配置按键GPIO为输入模式
+    #error "请在此处配置按键GPIO或ADC按键"
+    //EG: pinMode(KEY_GPIO, INPUT);//配置按键GPIO为输入模式
+
+}
+
+
+/**
+ * @brief 清除按键状态
+ * 
+ * @param key 
+ */
+void Key_Reset(Key_Element *key)
+{
+    key->times=0;
+    key->times_rec=0;
+    key->times_ticking=0;
+    key->tick_long=0;
+    key->out=0;
+    key->state=0;
+    key->val_pre=0;
+    key->bit=0;
+    key->multi_state=0;
 }
 
 
@@ -71,22 +98,44 @@ void Read_Key(Key_Element* key)
 }
 
 
+
 /**
- * @brief 清除按键状态
+ * @brief 刷新按键状态
  * 
- * @param key 
  */
-void Key_Clean(Key_Element *key)
+void Key_Refresh(void)
 {
-    key->times=0;
-    key->times_rec=0;
-    key->times_ticking=0;
-    key->tick_long=0;
-    key->out=0;
-    key->state=0;
-    key->val_pre=0;
-    key->bit=0;
-    key->multi_state=0;
+    #error "请在此处将按键的开关量赋予key*.bit,并为key*添加Read_Key函数"
+    //EG: key1.bit=digitalRead(KEY_GPIO);Read_Key(&key1);//读取按键状态
+
+}
+
+/**
+ * @brief 获取按键单击
+ */
+uint8_t Get_Key_Clik(Key_Element* key)
+{
+    uint8_t temp;
+    if(key->out!=0){temp=1;}else{temp=0;}
+    return temp;
+}
+
+/**
+ * @brief 获取按键长按
+ */
+uint8_t Get_Key_Long(Key_Element* key)
+{
+    uint8_t temp;
+    if(key->out==2){temp=1;}else{temp=0;}
+    return temp;
+}
+
+/**
+ * @brief 获取按键连击次数
+ */
+uint8_t Get_Key_Times(Key_Element* key)
+{
+    return key->times;
 }
 
 
@@ -96,6 +145,6 @@ void Key_Clean(Key_Element *key)
  */
 void Key_Task(void)
 {
-    key1.bit=digitalRead(KEY_GPIO);//读取按键状态
-    Read_Key(&key1);//返回按键值
+
+
 }

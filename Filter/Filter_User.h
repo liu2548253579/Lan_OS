@@ -1,7 +1,6 @@
 #ifndef __FILTER_USER_H__
 #define __FILTER_USER_H__
 
-#include "main.h"
 #include "stdint.h"
 
 //定义低通滤波器结构体

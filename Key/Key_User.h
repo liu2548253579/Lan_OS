@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 
-#define KEY_GPIO 21
 
 
 typedef struct 
@@ -32,8 +31,13 @@ typedef struct
 extern Key_Element key1;
 
 void Key_Init(void);
-void Key_Clean(Key_Element *key);
-void Read_Key(Key_Element* key);
+void Key_Reset(Key_Element *key);
+void Key_Refresh(void);
+
+uint8_t Get_Key_Clik(Key_Element* key);
+uint8_t Get_Key_Long(Key_Element* key);
+uint8_t Get_Key_Times(Key_Element* key);
+
 void Key_Task(void);
 
 

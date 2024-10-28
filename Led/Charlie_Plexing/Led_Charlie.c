@@ -1,37 +1,43 @@
 #include "Led_Charlie.h"
 
-uint8_t LED_Data[2] = {0x00,0x00}; // LED显示数据
+#error "请在此处修改LED的驱动引脚"
+LED_Element  LED1={
+    // .LED_Pin=GPIO_PIN_1,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED2={
+    // .LED_Pin=GPIO_PIN_2,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED3={
+    // .LED_Pin=GPIO_PIN_3,
+    // .LED_Port=GPIOA
+};
+LED_Element  LED4={
+    // .LED_Pin=GPIO_PIN_4,
+    // .LED_Port=GPIOA
+};
 
-
-void LED_Set_Output(uint16_t GPIO_Pin, uint8_t State)
+void LED_Charlie_ALL_OFF(void)
 {
-    PinMode(GPIO_Pin,OUTPUT);
-    digitalWrite(GPIO_Pin,State);
-}
-
-void LED_Set_Analog(uint16_t GPIO_Pin)
-{
-    PinMode(GPIO_Pin,ANALOG);
-}
-
-uint8_t Get_Bit(uint8_t data_led, uint8_t bit_index) {
-    if (bit_index >= 8) {
-        return 0; // 如果索引超出范围，返回 0
-    }
-    // 使用位掩码取出指定位并确保返回值为 0 或 1
-    return ((data_led >> bit_index) & 0x01) ? 1 : 0;
+    LED_Set_Input(&LED1);
+    LED_Set_Input(&LED2);
+    LED_Set_Input(&LED3);
+    LED_Set_Input(&LED4);
 }
 
 
-void LED_ALL_OFF(void)
-{
-    LED_Set_Analog(GPIO1);
-    LED_Set_Analog(GPIO2);
-    LED_Set_Analog(GPIO3);
-    LED_Set_Analog(GPIO4);
-}
+/*
+ * GPIO查理复用(Charlieplexing)对应关系表:
+ *           GPIO1   GPIO2   GPIO3   GPIO4   高电平
+ * GPIO1     禁用    LED1    LED2    LED3
+ * GPIO2     LED4    禁用    LED5    LED6
+ * GPIO3     LED7    LED8    禁用    LED9
+ * GPIO4     LED10   LED11   LED12   禁用
+ * 低电平
+ */
 
-void LED_Task(void)
+void LED_Charlie_ReFresh(void)
 {
     static uint8_t i,trig;
 
@@ -41,71 +47,71 @@ void LED_Task(void)
         LED_ALL_OFF();
     }
     else
-    {   
+    { 
         trig=1;
         i+=1;if(i>=12){i=0;}
         if(i==0)
         {
             if(Get_Bit(LED_Data[0],0))//LED1
             {
-                LED_Set_Output(GPIO1,0);
-                LED_Set_Output(GPIO2,1);
+                LED_Set_Output(&LED1,0);
+                LED_Set_Output(&LED2,1);
             }else{LED_ALL_OFF();}
         }
         if (i==1)
         {
             if(Get_Bit(LED_Data[0],1))
             {
-                LED_Set_Output(GPIO1,0);
-                LED_Set_Output(GPIO3,1);
+                LED_Set_Output(&LED1,0);
+                LED_Set_Output(&LED3,1);
             }else{LED_ALL_OFF();}
         }
         if (i==2)
         {
             if(Get_Bit(LED_Data[0],2))
             {
-                LED_Set_Output(GPIO1,0);
-                LED_Set_Output(GPIO4,1);
+                LED_Set_Output(&LED1,0);
+                LED_Set_Output(&LED4,1);
             }else{LED_ALL_OFF();}
         }
         if (i==3)
         {
             if(Get_Bit(LED_Data[0],3))
             {
-                LED_Set_Output(GPIO2,0);
-                LED_Set_Output(GPIO1,1);
+                LED_Set_Output(&LED2,0);
+                LED_Set_Output(&LED1,1);
             }else{LED_ALL_OFF();}
         }
         if (i==4)
         {
             if(Get_Bit(LED_Data[0],4))
             {
-                LED_Set_Output(GPIO2,0);
-                LED_Set_Output(GPIO3,1);
+                LED_Set_Output(&LED2,0);
+                LED_Set_Output(&LED3,1);
             }else{LED_ALL_OFF();}
         }
         if (i==5)
         {
             if(Get_Bit(LED_Data[0],5))
             {
-                LED_Set_Output(GPIO2,0);
-                LED_Set_Output(GPIO4,1);
+                LED_Set_Output(&LED2,0);
+                LED_Set_Output(&LED4,1);
             }else{LED_ALL_OFF();}
         }
         if (i==6)
         {
             if(Get_Bit(LED_Data[0],6))
             {
-                LED_Set_Output(GPIO3,0);
-                LED_Set_Output(GPIO1,1);
+                LED_Set_Output(&LED3,0);
+                LED_Set_Output(&LED1,1);
             }else{LED_ALL_OFF();}
         }
         if (i==7)
         {
             if(Get_Bit(LED_Data[0],7))
             {
-                LED_Set_Output(GPIO3,0);
-                LED_Set_Output(GPIO2,1);
+                LED_Set_Output(&LED3,0);
+                LED_Set_Output(&LED2,1);
             }else{LED_ALL_OFF();}
         }
 
@@ -114,34 +120,34 @@ void LED_Task(void)
         {
             if(Get_Bit(LED_Data[1],0))
             {
-                LED_Set_Output(GPIO3,0);
-                LED_Set_Output(GPIO4,1);
+                LED_Set_Output(&LED3,0);
+                LED_Set_Output(&LED4,1);
             }else{LED_ALL_OFF();}
         }
         if (i==9)
         {
             if(Get_Bit(LED_Data[1],1))
             {
-                LED_Set_Output(GPIO4,0);
-                LED_Set_Output(GPIO1,1);
+                LED_Set_Output(&LED4,0);
+                LED_Set_Output(&LED1,1);
             }else{LED_ALL_OFF();}
         }
         if (i==10)
         {
             if(Get_Bit(LED_Data[1],2))
             {
-                LED_Set_Output(GPIO4,0);
-                LED_Set_Output(GPIO2,1);
+                LED_Set_Output(&LED4,0);
+                LED_Set_Output(&LED2,1);
             }else{LED_ALL_OFF();}
         }
         if (i==11)
         {
             if(Get_Bit(LED_Data[1],3))
             {
-                LED_Set_Output(GPIO4,0);
-                LED_Set_Output(GPIO3,1);
+                LED_Set_Output(&LED4,0);
+                LED_Set_Output(&LED3,1);
             }else{LED_ALL_OFF();}
         }
     }
-
 }
+
