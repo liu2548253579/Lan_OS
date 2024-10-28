@@ -15,8 +15,16 @@ Key_Element key1={
 void Key_Init(void)
 {
     #error "请在此处配置按键GPIO或ADC按键"
-    //EG: pinMode(KEY_GPIO, INPUT);//配置按键GPIO为输入模式
 
+    /*EG:
+    GPIO_InitTypeDef GPIO_InitStruct;
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    */
 }
 
 

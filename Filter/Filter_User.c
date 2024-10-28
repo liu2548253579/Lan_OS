@@ -1,7 +1,9 @@
 #include "Filter_User.h"
 
 
-//低通滤波器
+/**
+ * @brief 低通滤波器
+ */
 void LowPass_Filter (LowPass_Filter_Element *lowpass)
 {
     lowpass->out=((float)lowpass->value*0.3f)+((float)lowpass->pre*0.7f);
@@ -10,7 +12,9 @@ void LowPass_Filter (LowPass_Filter_Element *lowpass)
 
 
 
-//滑动均值滤波器
+/**
+ * @brief 滑动均值滤波器
+ */
 void Slip_Filter (Slip_Filter_Element *slip)
 {
     uint64_t Filter_value = 0;

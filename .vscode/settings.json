@@ -5,6 +5,8 @@
         "key_user.h": "c",
         "led_charlie.h": "c",
         "led_matrix.h": "c",
-        "led_user.h": "c"
+        "led_user.h": "c",
+        "adc_user.h": "c",
+        "charge_user.h": "c"
     }
 }
