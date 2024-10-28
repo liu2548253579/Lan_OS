@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "filter_user.h": "c",
+        "stdint.h": "c",
+        "key_user.h": "c"
+    }
+}
